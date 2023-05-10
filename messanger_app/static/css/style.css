@@ -1,0 +1,28 @@
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.column{
+    flex-direction: column;
+}
+.middle{
+    display: flex;
+    width:100%;
+    justify-content: center;
+}
+
+.padding-side{
+    padding-left:50px;
+    padding-right:50px;
+}
+
+.padding-vertical{
+    padding-top:20px;
+    padding-bottom:20px;
+}
+
+.text-center{
+    text-align: center;
+}

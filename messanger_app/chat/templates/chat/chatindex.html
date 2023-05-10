@@ -1,0 +1,20 @@
+{% extends "base.html" %} 
+
+
+{% block content %}
+{% if request.user.is_authenticated %}
+<h1>Messages</h1>
+<form class="center column"onsubmit="sendMessage()" methode="POST">
+    <div class="mdl-textfield mdl-js-textfield">
+        <input class="mdl-textfield__input" type="text" id="receiver">
+        <label class="mdl-textfield__label" for="receiver">Empfänger</label>
+      </div>
+    <div class="mdl-textfield mdl-js-textfield">
+      <textarea class="mdl-textfield__input" type="text" rows= "3" id="message" ></textarea>
+      <label class="mdl-textfield__label" for="message">Text...</label>
+    </div>
+  </form>
+{% else %}
+  <div class="column center text-center padding-vertical"><h3>You are not logged!<br> Please log in <br><a href="/login/">here</a></h3></div>
+{% endif %}
+{% endblock %}

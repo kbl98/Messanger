@@ -1,0 +1,10 @@
+{% extends "base.html" %} 
+{% block content %}
+<form action="/registration/" method="POST" novalidate>
+	{% csrf_token %}
+	<h2 class="middle">Sign Up</h2>
+	{{ form.as_p }}		
+	<div class="middle"><input  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit" value="Sign in" /></div>
+</form>
+
+{% endblock %}
