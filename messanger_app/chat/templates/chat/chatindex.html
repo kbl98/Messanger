@@ -1,18 +1,52 @@
 {% extends "base.html" %} 
-
-
 {% block content %}
 {% if request.user.is_authenticated %}
+<script>
+  async function sendMessage(){
+    console.log('test')
+    let fd=new FormData();
+    let token= '{{ csrf_token }}';
+        let datum=new Date().toDateString().slice(4)
+        fd.append('textmessage',messageField.value)
+        fd.append('receiver',receiverField.value)
+        fd.append('csrfmiddlewaretoken',token)
+    await fetch("/chat/",{
+            method:'POST',
+            body:fd
+        })
+       
+  }
+   
+</script>
+
+
 <h1>Messages</h1>
-<form class="center column"onsubmit="sendMessage()" methode="POST">
+<form class="center column" onsubmit="sendMessage();return false;" methode="POST">
+    
+<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    {% csrf_token %}
+    <select class="mdl-textfield__input" id="receiverField" name="receiver" >
+       
+        <option></option>
+      {% for user in users %}
+      <option value="{{user.username}}">{{user.username}}</option>
+      {% endfor %}
+    </select>
+    <label class="mdl-textfield__label" for="receiver">Message to</label>
+  </div>  
+
+  
+       
+     
     <div class="mdl-textfield mdl-js-textfield">
-        <input class="mdl-textfield__input" type="text" id="receiver">
-        <label class="mdl-textfield__label" for="receiver">Empfänger</label>
-      </div>
-    <div class="mdl-textfield mdl-js-textfield">
-      <textarea class="mdl-textfield__input" type="text" rows= "3" id="message" ></textarea>
+      <textarea class="mdl-textfield__input" type="text" rows= "3" id="messageField" ></textarea>
       <label class="mdl-textfield__label" for="message">Text...</label>
     </div>
+    <button type="submit"
+    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+  >
+    Send
+  </button>
   </form>
 {% else %}
   <div class="column center text-center padding-vertical"><h3>You are not logged!<br> Please log in <br><a href="/login/">here</a></h3></div>

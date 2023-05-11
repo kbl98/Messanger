@@ -10,3 +10,5 @@ class Message (models.Model):
     receiver = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE, related_name='receiver_message_set',default=None,blank=True, null=True)
     chat = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE, related_name='chat_message_set',default=None,blank=True, null=True)
 
+class User (models.Model):
+    username =  models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE, related_name='username_user_set')

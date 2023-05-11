@@ -1,6 +1,6 @@
 
 from django.shortcuts import render,redirect
-from .models import Message
+from .models import Message,User
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -13,7 +13,17 @@ from django.core import serializers
 @login_required(login_url='/login/')
 
 def chatindex(request):
-    return render (request,'chat/chatindex.html')
+    if request.method == 'POST':
+        print('This request:'+request.POST['textmessage'])
+        receiver_username = request.POST['receiver']
+        receiver_user = User.objects.get(username=receiver_username)
+        new_message=Message.objects.create(text = request.POST['textmessage'],author=request.user, receiver =receiver_user.id)
+        chatUsers=User.objects.all()
+        return render (request,'chat/chatindex.html',{'users':chatUsers})
+    if request.method == 'GET':
+        chatUsers=User.objects.all()
+        print(chatUsers)
+        return render (request,'chat/chatindex.html',{'users':chatUsers})
 
 def loginindex(request):
     if request.method == 'POST':
@@ -36,6 +46,7 @@ def registrationindex(request):
             user = form.save(commit=False)
             user.username = user.username.lower()
             user.save()
+            User.objects.create(username=user)
             login(request, user)
             return HttpResponseRedirect ('/chat/')
         else:
