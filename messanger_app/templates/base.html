@@ -10,6 +10,8 @@
 {%load static %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <title>Messanger</title>
+<script src="{% static 'js/script.js' %}"></script>
+
 </head>
 <body>
     <!-- Always shows a header, even in smaller screens. -->
@@ -21,17 +23,13 @@
         <!-- Add spacer, to align navigation to the right -->
         <div class="mdl-layout-spacer"></div>
         <!-- Navigation. We hide it in small screens. -->
-        <nav class="mdl-navigation mdl-layout--large-screen-only">
-          <a class="mdl-navigation__link" href="">Link</a>
+        <nav class="mdl-navigation ">
+          <div class="mdl-navigation__link pointer" onclick="logout()">Logout</div>
         </nav>
       </div>
     </header>
-    <div class="mdl-layout__drawer">
-      <span class="mdl-layout-title">Messanger</span>
-      <nav class="mdl-navigation">
-        <a class="mdl-navigation__link" href="">Link</a>
-      </nav>
-    </div>
+   
+    
     <main class="mdl-layout__content">
       <div class="page-content center padding-side"><!-- Your content goes here -->
         <div>

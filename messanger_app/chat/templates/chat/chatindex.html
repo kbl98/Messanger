@@ -1,54 +1,117 @@
-{% extends "base.html" %} 
-{% block content %}
-{% if request.user.is_authenticated %}
+{% extends "base.html" %} {% block content %}
+
 <script>
-  async function sendMessage(){
-    console.log('test')
-    let fd=new FormData();
-    let token= '{{ csrf_token }}';
-        let datum=new Date().toDateString().slice(4)
-        fd.append('textmessage',messageField.value)
-        fd.append('receiver',receiverField.value)
-        fd.append('csrfmiddlewaretoken',token)
-    await fetch("/chat/",{
-            method:'POST',
-            body:fd
-        })
-       
+  async function sendMessage() {
+    let fd = getFormdata();
+    let datum = new Date().toDateString().slice(4);
+    document.getElementById("message-cont").innerHTML += `
+    <div id="waiting" class="waiting"></div>`;
+    try {
+      let response = await fetch("/chat/", {
+        method: "POST",
+        body: fd,
+      });
+      let json = await response.json();
+      json = JSON.parse(json);
+      datum = new Date(json.fields.date).toDateString().slice(4);
+      document.getElementById("waiting").remove();
+      document.getElementById("message-cont").innerHTML += renderMessage(
+        receiverField.value,
+        datum,
+        json.fields.text
+      );
+
+      receiverField.value = "";
+      messageField.value = "";
+    } catch (error) {
+      alert("An Error occured");
+    }
   }
-   
+
+  function getFormdata() {
+    let fd = new FormData();
+    let token = "{{ csrf_token }}";
+    fd.append("textmessage", messageField.value);
+    fd.append("receiver", receiverField.value);
+    fd.append("csrfmiddlewaretoken", token);
+    return fd;
+  }
+
+  function renderMessage(receiver, datum, jsontext) {
+    return ` <div class="center column row">
+            <div class="row">
+            <h7 class="m-side">{{request.user}}
+                 to
+                    ${receiver}</h7>
+                    </div>
+                    <div class="center column bubble margin mw200"><span class="date">${datum}</span><i>${jsontext}</i></div>
+                    </div>`;
+  }
 </script>
-
-
-<h1>Messages</h1>
-<form class="center column" onsubmit="sendMessage();return false;" methode="POST">
-    
-<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+{% if request.user.is_authenticated %}
+<h1 class="center">Messages</h1>
+<form
+  class="center column margin border"
+  onsubmit="sendMessage();return false;"
+  methode="POST"
+>
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
     {% csrf_token %}
-    <select class="mdl-textfield__input" id="receiverField" name="receiver" >
-       
-        <option></option>
+    <select
+      class="mdl-textfield__input"
+      id="receiverField"
+      name="receiver"
+      required
+    >
+      <option></option>
       {% for user in users %}
       <option value="{{user.username}}">{{user.username}}</option>
       {% endfor %}
     </select>
     <label class="mdl-textfield__label" for="receiver">Message to</label>
-  </div>  
+  </div>
 
-  
-       
-     
-    <div class="mdl-textfield mdl-js-textfield">
-      <textarea class="mdl-textfield__input" type="text" rows= "3" id="messageField" ></textarea>
-      <label class="mdl-textfield__label" for="message">Text...</label>
-    </div>
-    <button type="submit"
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    <textarea
+      name="message"
+      class="mdl-textfield__input"
+      type="text"
+      rows="3"
+      id="messageField"
+      required
+    ></textarea>
+    <label class="mdl-textfield__label" for="message">Text..</label>
+  </div>
+  <button
+    type="submit"
     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
   >
     Send
   </button>
-  </form>
-{% else %}
-  <div class="column center text-center padding-vertical"><h3>You are not logged!<br> Please log in <br><a href="/login/">here</a></h3></div>
-{% endif %}
-{% endblock %}
+</form>
+<div id="message-cont">
+  {% for message in messages %} {% if message.author == user %}
+  <div class="center column row">
+    {% else %}
+    <div class="center column row-reverse">
+      {% endif %}
+      <div class="row">
+        <h7 class="m-side">{{message.author}} to {{message.receiver}}</h7>
+      </div>
+      <div class="center column bubble margin mw200">
+        <span class="date">{{message.date}}</span><i>{{message.text}}</i>
+      </div>
+    </div>
+
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div class="column center text-center padding-vertical">
+    <h3>
+      You are not logged!<br />
+      Please log in <br /><a href="/login/">here</a>
+    </h3>
+  </div>
+  {% endif %} {% endblock %}
+</div>

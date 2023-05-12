@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Message,User
+from .models import Message,User2
 
 class MessageAdmin(admin.ModelAdmin):
    fields = ('chat','text','date','author','receiver')
@@ -7,5 +7,5 @@ class MessageAdmin(admin.ModelAdmin):
 
 # Register your models here.
 admin.site.register(Message,MessageAdmin)
-admin.site.register(User)
+admin.site.register(User2)
 
