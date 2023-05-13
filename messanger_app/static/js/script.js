@@ -1,5 +1,1 @@
-function logout(){
-    fetch("/logout/", {
-});
-}
 

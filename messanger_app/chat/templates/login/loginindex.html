@@ -1,26 +1,31 @@
 {% extends "base.html" %} {% block content %}
 <div class="">
-    <h1>Login</h1>
-    {% if notUser %}
-    <div>Falsches Passwort oder Nutzername</div>
-    {% endif %}
-    <form action="/login/" method="post">
-      {% csrf_token %}
-      <div class="center column padding-vertical">
-        <input type="text" name = "username">
-        <label for="user">User name</label>
+  <h1>Login</h1>
+  {% if notUser %}
+  <div>Falsches Passwort oder Nutzername</div>
+  {% endif %}
+  <form action="/login/" method="post">
+    {% csrf_token %}
+    <div class="center column padding-vertical">
+      <input type="text" name="username" />
+      <label for="user">User name</label>
     </div>
     <div class="center column padding-vertical">
-        <input type="password" name = "password" >
-        <label for="user">Password</label>
-     </div>
-    <div class="middle"><button class=" mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-       Log in
+      <input type="password" name="password" />
+      <label for="user">Password</label>
+    </div>
+    <div class="middle">
+      <button
+        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+      >
+        Log in
       </button>
     </div>
-    </form>
-    
-    <div class="middle padding-vertical">New User? <a href="/registration/">Sign in</a></div>
-    </div>
-    
+  </form>
+
+  <div class="middle padding-vertical">
+    New User? <a href="/registration/">Sign in</a>
+  </div>
+</div>
+
 {% endblock %}

@@ -73,5 +73,5 @@ def logout_view(request):
     """function for logout of user"""
     if request.user.is_authenticated:
         logout(request)
-        return render (request,'login/loginindex.html')
+        return HttpResponseRedirect('/login/')
     return render (request,'login/loginindex.html')

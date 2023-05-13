@@ -11,7 +11,6 @@
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <title>Messanger</title>
 <script src="{% static 'js/script.js' %}"></script>
-
 </head>
 <body>
     <!-- Always shows a header, even in smaller screens. -->
@@ -24,7 +23,7 @@
         <div class="mdl-layout-spacer"></div>
         <!-- Navigation. We hide it in small screens. -->
         <nav class="mdl-navigation ">
-          <div class="mdl-navigation__link pointer" onclick="logout()">Logout</div>
+          <a class="mdl-navigation__link pointer" href="/logout/">Logout</a>
         </nav>
       </div>
     </header>
