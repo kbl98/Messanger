@@ -13,6 +13,9 @@ from django.db.models import Q
 from django.contrib.auth import logout
 from django.views.decorators.csrf import csrf_protect
 from asgiref.sync import sync_to_async
+import json
+from django.http import HttpResponse
+
 
 
 
@@ -23,14 +26,25 @@ from asgiref.sync import sync_to_async
 def chatindex(request):
     """This is a view to create a new Message Object at Backend and return the new Message to Frontend on post, on get Messages are rendered"""
     if request.method == 'POST':
-        print('This request:'+request.POST['textmessage'])
         receiver_username = request.POST['receiver']
-        print(receiver_username)
         receiver_user=User.objects.get(username=receiver_username)
         new_message=Message.objects.create(text = request.POST['textmessage'],author=request.user, receiver =receiver_user)
+        author_data = {
+            'id': new_message.author.id,
+            'username': new_message.author.username}
+        receiver_data={
+            'id':new_message.receiver.id,
+            'username':new_message.receiver.username
+        }
+        response_data = {
+        'author': author_data,
+        'receiver': receiver_data,
+        'text': new_message.text,
+        'date':new_message.date
+        }
         chatUsers=User2.objects.all()
-        serialized_messages=serializers.serialize('json',[new_message])
-        return JsonResponse(serialized_messages[1:-1],safe=False)
+        return JsonResponse(response_data, safe=False)
+        
         
     if request.method == 'GET':
         chatUsers=User.objects.all()

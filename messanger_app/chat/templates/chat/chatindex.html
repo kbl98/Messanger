@@ -1,53 +1,12 @@
-{% extends "base.html" %} {% block content %}
-
+{% extends "base.html" %} {% load static %} {% block content %}
 <script>
-  async function sendMessage() {
-    let fd = getFormdata();
-    let datum = new Date().toDateString().slice(4);
-    document.getElementById("message-cont").innerHTML += `
-    <div id="waiting" class="waiting"></div>`;
-    try {
-      let response = await fetch("/chat/", {
-        method: "POST",
-        body: fd,
-      });
-      let json = await response.json();
-      json = JSON.parse(json);
-      datum = new Date(json.fields.date).toDateString().slice(4);
-      document.getElementById("waiting").remove();
-      document.getElementById("message-cont").innerHTML += renderMessage(
-        receiverField.value,
-        datum,
-        json.fields.text
-      );
-
-      receiverField.value = "";
-      messageField.value = "";
-    } catch (error) {
-      alert("An Error occured");
-    }
-  }
-
-  function getFormdata() {
-    let fd = new FormData();
-    let token = "{{ csrf_token }}";
-    fd.append("textmessage", messageField.value);
-    fd.append("receiver", receiverField.value);
-    fd.append("csrfmiddlewaretoken", token);
-    return fd;
-  }
-
-  function renderMessage(receiver, datum, jsontext) {
-    return ` <div class="center column row">
-            <div class="row">
-            <h7 class="m-side">{{request.user}}
-                 to
-                    ${receiver}</h7>
-                    </div>
-                    <div class="center column bubble margin mw200"><span class="date">${datum}</span><i>${jsontext}</i></div>
-                    </div>`;
-  }
+    let token= "{{ csrf_token }}";
 </script>
+<script>
+    
+
+</script>
+
 {% if request.user.is_authenticated %}
 <h1 class="center">Messages</h1>
 <form
